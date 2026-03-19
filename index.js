@@ -75,7 +75,7 @@ app.get('/api/stats', (req, res) => {
 });
 
 app.post('/webhook', async (req, res) => {
-  const key = req.headers['x-api-key'];
+  const key = req.headers['x-api-key'] || req.body.apiKey;
 
   if (key !== API_KEY) {
     return res.status(403).json({ error: "Unauthorized" });
