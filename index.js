@@ -154,15 +154,14 @@ async function executeTrade(trade) {
     });
 
     console.log('✅ ORDER PLACED:', order);
+    console.log("🚀 EXECUTED:", trade.symbol);
+
     return { filled: true, price: trade.entry };
 
   } catch (err) {
     console.error('❌ ORDER FAILED:', err.message);
     return { filled: false };
   }
-}
-  console.log("🚀 EXECUTED:", trade.symbol);
-  return { filled: true };
 }
 
 /* ======================
@@ -249,6 +248,27 @@ app.post('/api/toggle', (req, res) => {
 ====================== */
 loadState();
 
+
 app.listen(PORT, () => {
   console.log(`🚀 Running on ${PORT}`);
+});
+
+/* ======================
+   TRADE ROUTE
+====================== */
+app.get("/trade", async (req, res) => {
+  try {
+    const order = await alpaca.createOrder({
+      symbol: "AAPL",
+      qty: 1,
+      side: "buy",
+      type: "market",
+      time_in_force: "gtc"
+    });
+
+    res.send("Trade executed 🚀");
+  } catch (err) {
+    console.error(err);
+    res.send("Trade failed");
+  }
 });
